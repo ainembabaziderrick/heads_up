@@ -17,15 +17,19 @@ defmodule HeadsUpWeb.Router do
 
   def snoop(conn, _opts) do
     answer = ~w(Yes No Maybe) |> Enum.random()
+
     conn = assign(conn, :answer, answer)
-    IO.inspect(conn)
+
+    # IO.inspect(conn)
+
     conn
   end
 
   scope "/", HeadsUpWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
+    live "/", IncidentLive.Index
 
     get "/tips", TipController, :index
     get "/tips/:id", TipController, :show

@@ -42,7 +42,7 @@ defmodule HeadsUpWeb do
         formats: [:html, :json],
         layouts: [html: HeadsUpWeb.Layouts]
 
-      use Gettext, backend: HeadsUpWeb.Gettext
+      use Gettext, backend: MyAppWeb.Gettext
 
       import Plug.Conn
 

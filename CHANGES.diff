@@ -1,0 +1,84 @@
+--- a/lib/heads_up_web/components/layouts/app.html.heex
++++ b/lib/heads_up_web/components/layouts/app.html.heex
+@@ -2,30 +2,14 @@
+   <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+     <div class="flex items-center gap-4">
+       <a href="/">
+-        <img src={~p"/images/logo.svg"} width="36" />
+-      </a>
+-      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
+-        v<%= Application.spec(:phoenix, :vsn) %>
+-      </p>
+-    </div>
+-    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+-      <a href="https://twitter.com/elixirphoenix" class="hover:text-zinc-700">
+-        @elixirphoenix
+-      </a>
+-      <a href="https://github.com/phoenixframework/phoenix" class="hover:text-zinc-700">
+-        GitHub
+-      </a>
+-      <a
+-        href="https://hexdocs.pm/phoenix/overview.html"
+-        class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+-      >
+-        Get Started <span aria-hidden="true">&rarr;</span>
++        <img src={~p"/images/heads-up-logo.png"} width="175" />
+       </a>
+     </div>
++    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900"></div>
+   </div>
+ </header>
+-<main class="px-4 py-20 sm:px-6 lg:px-8">
+-  <div class="mx-auto max-w-2xl">
++<main class="px-4 py-12 sm:px-6 lg:px-8">
++  <div class="mx-auto max-w-4xl">
+     <.flash_group flash={@flash} />
+     <%= @inner_content %>
+   </div>
+--- a/lib/heads_up_web/live/effort_live.ex
++++ b/lib/heads_up_web/live/effort_live.ex
+@@ -6,7 +6,14 @@ defmodule HeadsUpWeb.EffortLive do
+       Process.send_after(self(), :tick, 2000)
+     end
+ 
+-    socket = assign(socket, responders: 0, minutes_per_responder: 10)
++    socket =
++      assign(
++        socket,
++        responders: 0,
++        minutes_per_responder: 10,
++        page_title: "Effort"
++      )
++
+     {:ok, socket}
+   end
+ 
+--- a/lib/heads_up_web/live/incident_live/index.ex
++++ b/lib/heads_up_web/live/incident_live/index.ex
+@@ -5,7 +5,12 @@ defmodule HeadsUpWeb.IncidentLive.Index do
+   import HeadsUpWeb.CustomComponents
+ 
+   def mount(_params, _session, socket) do
+-    socket = assign(socket, :incidents, Incidents.list_incidents())
++    socket =
++      assign(socket,
++        incidents: Incidents.list_incidents(),
++        page_title: "Incidents"
++      )
++
+     {:ok, socket}
+   end
+ 
+--- a/lib/heads_up_web/router.ex
++++ b/lib/heads_up_web/router.ex
+@@ -28,7 +28,9 @@ defmodule HeadsUpWeb.Router do
+   scope "/", HeadsUpWeb do
+     pipe_through :browser
+ 
+-    get "/", PageController, :home
++    # get "/", PageController, :home
++    live "/", IncidentLive.Index
++
+     get "/tips", TipController, :index
+     get "/tips/:id", TipController, :show
+     live "/effort", EffortLive

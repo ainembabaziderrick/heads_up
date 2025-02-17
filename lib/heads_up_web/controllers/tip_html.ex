@@ -6,12 +6,11 @@ defmodule HeadsUpWeb.TipHTML do
   def show(assigns) do
     ~H"""
     <div class="tips">
-      <h1> <%= @answer %>! You Like a Tip, Yes?</h1>
-    <p>
-    <%= @tip.text %>
-    </p>
+      <h1>You Like a Tip, <%= @answer %>?</h1>
+      <p>
+        <%= @tip.text %>
+      </p>
     </div>
     """
   end
-
 end

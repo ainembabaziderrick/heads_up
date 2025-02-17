@@ -5,7 +5,6 @@
 /* This file is for your main application CSS */
 
 @layer components {
-
   /* Tips */
 
   .tips h1 {
@@ -234,7 +233,7 @@
     @apply flex h-2 overflow-hidden text-base bg-sky-200 rounded-lg mb-4;
   }
 
-  #incident-form .entry .progress .bar>span {
+  #incident-form .entry .progress .bar > span {
     @apply shadow-md bg-sky-500;
     transition: width 1s ease;
   }

@@ -16,14 +16,14 @@ config :heads_up, HeadsUp.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-# Binding to loopback ipv4 address prevents access from other machines.
 config :heads_up, HeadsUpWeb.Endpoint,
+  # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4001],
+  http: [ip: {127, 0, 0, 1}, port: System.get_env("PORT") || 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "EGXbx/nwgB7e5ra4ivzylxXhHnp6KrpMBVF2D/Bg8O7mRpHsp6DHZbDgMYNQerCj",
+  secret_key_base: "1gaKKRoiU4drwzsvdeTYQNkJt67beVCXOQ+4rS7p6KXNRksLMPWu86mMecin5CyY",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:heads_up, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:heads_up, ~w(--watch)]}

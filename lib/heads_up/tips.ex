@@ -17,12 +17,10 @@ defmodule HeadsUp.Tips do
   end
 
   def get_tip(id) when is_integer(id) do
-    list_tips()
-    |> Enum.find(&(&1.id == id))
+    Enum.find(list_tips(), fn t -> t.id == id end)
   end
 
   def get_tip(id) when is_binary(id) do
-    list_tips()
-    |> Enum.find(&(&1.id == String.to_integer(id)))
+    id |> String.to_integer() |> get_tip()
   end
 end
