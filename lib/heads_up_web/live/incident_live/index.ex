@@ -6,10 +6,17 @@ defmodule HeadsUpWeb.IncidentLive.Index do
 
   def mount(_params, _session, socket) do
     socket =
-      assign(socket,
-        incidents: Incidents.list_incidents(),
+      stream(socket,
+        :incidents, Incidents.filter_incidents(),
         page_title: "Incidents"
       )
+      socket =
+        attach_hook(socket, :log_stream, :after_render, fn
+          socket ->
+            IO.inspect(socket.assigns.streams.incidents)
+            socket
+        end)
+
 
     {:ok, socket}
   end
@@ -23,17 +30,19 @@ defmodule HeadsUpWeb.IncidentLive.Index do
           Thanks for pitching in. <%= vibe %>
         </:tagline>
       </.headline>
-      <div class="incidents">
-        <.incident_card :for={incident <- @incidents} incident={incident} />
+      <div class="incidents" id="incidents" phx-update="stream">
+        <.incident_card :for={{dom_id,incident} <- @streams.incidents} incident={incident} id ={dom_id} />
       </div>
     </div>
     """
   end
 
-  attr :incident, HeadsUp.Incident, required: true
+  attr :incident, HeadsUp.Incidents.Incident, required: true
+  attr :id, :string, required: true
 
   def incident_card(assigns) do
     ~H"""
+    <.link navigate={~p"/incidents/#{@incident}"}>
     <div class="card">
       <img src={@incident.image_path} />
       <h2><%= @incident.name %></h2>
@@ -44,6 +53,7 @@ defmodule HeadsUpWeb.IncidentLive.Index do
         </div>
       </div>
     </div>
+    </.link>
     """
   end
 end
