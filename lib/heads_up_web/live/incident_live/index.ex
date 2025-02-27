@@ -6,10 +6,12 @@ defmodule HeadsUpWeb.IncidentLive.Index do
 
   def mount(_params, _session, socket) do
     socket =
-      stream(socket,
-        :incidents, Incidents.filter_incidents(),
+      socket |>
+      stream(
+        :incidents, Incidents.list_incidents(),
         page_title: "Incidents"
-      )
+      )|>
+      assign(:form, to_form%{})
       socket =
         attach_hook(socket, :log_stream, :after_render, fn
           socket ->
@@ -30,10 +32,31 @@ defmodule HeadsUpWeb.IncidentLive.Index do
           Thanks for pitching in. <%= vibe %>
         </:tagline>
       </.headline>
+      <.filter_form form={@form}/>
       <div class="incidents" id="incidents" phx-update="stream">
         <.incident_card :for={{dom_id,incident} <- @streams.incidents} incident={incident} id ={dom_id} />
       </div>
     </div>
+    """
+  end
+
+  def filter_form(assigns) do
+    ~H"""
+    <.form for = {@form}>
+    <.input field={@form[:q]} placeholder="Search..." autocomplete = "off"/>
+    <.input
+    field = {@form[:status]}
+    options = {[:pending, :resolved, :cancelled]}
+    prompt = "Status"
+    type = "select"
+    />
+    <.input
+    field = {@form[:sort_by]}
+    options = {[:name, :priority]}
+    prompt = "Sort By"
+    type = "select"
+    />
+    </.form>
     """
   end
 
