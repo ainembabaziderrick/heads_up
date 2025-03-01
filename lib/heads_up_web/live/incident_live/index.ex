@@ -48,7 +48,14 @@ defmodule HeadsUpWeb.IncidentLive.Index do
         prompt="Status"
         type="select"
       />
-      <.input field={@form[:sort_by]} options={[:name, :priority]} prompt="Sort By" type="select" />
+      <.input field={@form[:sort_by]}
+      options={[
+        Name: "name",
+        "Priority: High to Low": "priority_desc",
+        "Priority: Low to High": "priority_asc"
+      ]}
+      prompt="Sort By"
+      type="select" />
       <.link patch={~p"/incidents"}>Reset</.link>
     </.form>
     """

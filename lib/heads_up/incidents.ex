@@ -26,12 +26,20 @@ defmodule HeadsUp.Incidents do
   end
 
 
-  defp sort(query, sort_by) do
-    case sort_by do
-      "name" -> order_by(query, [i], i.name)
-      "priority" -> order_by(query, [i], i.priority)
-      _any -> query
-    end
+  defp sort(query, "name") do
+    order_by(query, :name)
+  end
+
+  defp sort(query, "priority_desc") do
+    order_by(query, desc: :priority)
+  end
+
+  defp sort(query, "priority_asc") do
+    order_by(query, asc: :priority)
+  end
+
+  defp sort(query, _) do
+    order_by(query, :id)
   end
 
   def get_incident(id) do
