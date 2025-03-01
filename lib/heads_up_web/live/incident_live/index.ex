@@ -41,7 +41,7 @@ defmodule HeadsUpWeb.IncidentLive.Index do
   def filter_form(assigns) do
     ~H"""
     <.form for={@form} id="filter-form" phx-change="filter" >
-      <.input field={@form[:q]} placeholder="Search..." autocomplete="off" />
+      <.input field={@form[:q]} placeholder="Search..." autocomplete="off" phx-debounce="1000" />
       <.input
         field={@form[:status]}
         options={[:pending, :resolved, :canceled]}
