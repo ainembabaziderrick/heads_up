@@ -5,7 +5,7 @@ defmodule HeadsUpWeb.IncidentLive.Index do
   import HeadsUpWeb.CustomComponents
 
   def mount(_params, _session, socket) do
-       {:ok, socket}
+    {:ok, socket}
   end
 
   def handle_params(params, _uri, socket) do
@@ -14,7 +14,7 @@ defmodule HeadsUpWeb.IncidentLive.Index do
       |> assign(:form, to_form(params))
       |> stream(:incidents, Incidents.filter_incidents(params), reset: true)
 
-      {:noreply, socket}
+    {:noreply, socket}
   end
 
   def render(assigns) do
@@ -40,7 +40,7 @@ defmodule HeadsUpWeb.IncidentLive.Index do
 
   def filter_form(assigns) do
     ~H"""
-    <.form for={@form} id="filter-form" phx-change="filter" >
+    <.form for={@form} id="filter-form" phx-change="filter">
       <.input field={@form[:q]} placeholder="Search..." autocomplete="off" phx-debounce="1000" />
       <.input
         field={@form[:status]}
@@ -48,14 +48,16 @@ defmodule HeadsUpWeb.IncidentLive.Index do
         prompt="Status"
         type="select"
       />
-      <.input field={@form[:sort_by]}
-      options={[
-        Name: "name",
-        "Priority: High to Low": "priority_desc",
-        "Priority: Low to High": "priority_asc"
-      ]}
-      prompt="Sort By"
-      type="select" />
+      <.input
+        field={@form[:sort_by]}
+        options={[
+          Name: "name",
+          "Priority: High to Low": "priority_desc",
+          "Priority: Low to High": "priority_asc"
+        ]}
+        prompt="Sort By"
+        type="select"
+      />
       <.link patch={~p"/incidents"}>Reset</.link>
     </.form>
     """
@@ -68,6 +70,9 @@ defmodule HeadsUpWeb.IncidentLive.Index do
     ~H"""
     <.link navigate={~p"/incidents/#{@incident}"}>
       <div class="card">
+        <div class="category">
+          {@incident.category.name}
+        </div>
         <img src={@incident.image_path} />
         <h2>{@incident.name}</h2>
         <div class="details">
@@ -86,8 +91,8 @@ defmodule HeadsUpWeb.IncidentLive.Index do
       params
       |> Map.take(~w(q status sort_by))
       |> Map.reject(fn {_k, v} -> v == "" end)
+
     socket = push_patch(socket, to: ~p"/incidents?#{params}")
     {:noreply, socket}
   end
-
 end

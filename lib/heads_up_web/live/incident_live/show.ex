@@ -33,7 +33,10 @@ defmodule HeadsUpWeb.IncidentLive.Show do
             <.badge status={@incident.status} />
           </div>
           <header>
-            <h2>{@incident.name}</h2>
+            <div>
+              <h2>{@incident.name}</h2>
+              <h3>{@incident.category.name}</h3>
+            </div>
             <div class="priority">
               {@incident.priority}
             </div>
@@ -58,23 +61,23 @@ defmodule HeadsUpWeb.IncidentLive.Show do
     <section>
       <h4>Urgent Incidents</h4>
       <.async_result :let={result} assign={@incidents}>
-      <:loading>
-        <div class="loading">
-          <div class="spinner"></div>
-        </div>
-      </:loading>
-      <:failed  :let={{:error, reason}}>
-        <div class="failed">
-          Whoops: {reason}
-        </div>
-      </:failed>
-      <ul class="incidents">
-        <li :for={incident <- result}>
-          <.link navigate={~p"/incidents/#{incident}"}>
-            <img src={incident.image_path} /> {incident.name}
-          </.link>
-        </li>
-      </ul>
+        <:loading>
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </:loading>
+        <:failed :let={{:error, reason}}>
+          <div class="failed">
+            Whoops: {reason}
+          </div>
+        </:failed>
+        <ul class="incidents">
+          <li :for={incident <- result}>
+            <.link navigate={~p"/incidents/#{incident}"}>
+              <img src={incident.image_path} /> {incident.name}
+            </.link>
+          </li>
+        </ul>
       </.async_result>
     </section>
     """
