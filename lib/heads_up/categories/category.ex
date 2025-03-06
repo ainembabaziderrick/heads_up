@@ -5,7 +5,7 @@ defmodule HeadsUp.Categories.Category do
   schema "categories" do
     field :name, :string
     field :slug, :string
-
+    has_many :incidents, HeadsUp.Incidents.Incident
     timestamps(type: :utc_datetime)
   end
 
