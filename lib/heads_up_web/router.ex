@@ -13,6 +13,7 @@ defmodule HeadsUpWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
   end
 
   def snoop(conn, _opts) do
@@ -53,6 +54,14 @@ defmodule HeadsUpWeb.Router do
   #   pipe_through :api
   # end
 
+  scope "/api", HeadsUpWeb.Api do
+    pipe_through :api
+
+    get "/incidents", IncidentController, :index
+    get "/incidents/:id", IncidentController, :show
+  end
+
+
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:heads_up, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
@@ -64,6 +73,7 @@ defmodule HeadsUpWeb.Router do
 
     scope "/dev" do
       pipe_through :browser
+
 
       live_dashboard "/dashboard", metrics: HeadsUpWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
