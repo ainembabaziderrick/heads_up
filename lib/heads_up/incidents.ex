@@ -11,8 +11,15 @@ defmodule HeadsUp.Incidents do
     |> with_status( filter["status"])
     |> search_by(filter["q"])
     |> sort(filter["sort_by"])
+    |> with_category(filter["category"])
     |> preload(:category)
     |> Repo.all()
+  end
+
+  defp with_category(query, slug) when slug in ["", nil], do: query
+
+  defp with_category(query, slug) do
+    from i in query, join: c in assoc(i, :category), where: c.slug == ^slug
   end
 
   defp with_status(query, nil), do: query
@@ -37,6 +44,10 @@ defmodule HeadsUp.Incidents do
 
   defp sort(query, "priority_asc") do
     order_by(query, asc: :priority)
+  end
+
+  defp sort(query, "category") do
+    from i in query, join: c in assoc(i, :category), order_by: c.name
   end
 
   defp sort(query, _) do

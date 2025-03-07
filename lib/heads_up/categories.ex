@@ -43,6 +43,10 @@ defmodule HeadsUp.Categories do
     Repo.all(from c in Category, order_by: c.name, select: {c.name, c.id})
   end
 
+  def category_names_and_slugs do
+    Repo.all(from c in Category, order_by: c.name, select: {c.name, c.slug})
+  end
+
   @doc """
   Creates a category.
 
