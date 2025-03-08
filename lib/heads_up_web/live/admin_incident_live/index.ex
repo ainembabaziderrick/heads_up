@@ -27,7 +27,7 @@ defmodule HeadsUpWeb.AdminIncidentLive.Index do
         Toggle Joke
       </.button>
       <div class="joke hidden" id="joke">
-        Why shouldn't you trust trees?
+        Why shouldn't you trust trees {@current_user.username}?
       </div>
       <.header class="mt-6">
         <h1>{@page_title}</h1>
